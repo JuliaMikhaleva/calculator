@@ -1,14 +1,28 @@
 #simple div
-str_input = input("Delimoe: ")
-delimoe = int(str_input)
 
-operation = input ("+ / * - ^: ")
-str_input2 = input("Delitel: ")
-delitel = int(str_input2)
+input_str = input("One line with one operation: ")
+
+operation = None
+str_a = ""
+str_b = ""
+for letter in input_str:
+	if letter in "+-/*^":
+		operation = letter
+	else:
+		if operation is None:
+			str_a += letter
+		else:
+			str_b += letter
+
+delimoe = float(str_a)
+delitel = float(str_b)
 
 result = None
 if operation == '/':
-	result = delimoe / delitel
+	if delitel == 0:
+		result = "Inf"
+	else:
+		result = delimoe / delitel
 elif operation == "+":
 	result = delimoe + delitel
 elif operation == "*":
