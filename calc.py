@@ -3,10 +3,13 @@
 input_str = input("One line with one operation: ")
 
 operation = None
+was_digit = False
 str_a = ""
 str_b = ""
 for letter in input_str:
-	if letter in "+-/*^":
+	if letter in "0123456789":
+		was_digit = True
+	if letter in "+-/*^" and was_digit and operation is None:
 		operation = letter
 	else:
 		if operation is None:
