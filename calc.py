@@ -2,39 +2,52 @@
 
 input_str = input("One line with one operation: ")
 
-operation = None
+result = 0
+operation = "+"
 was_digit = False
 str_a = ""
-str_b = ""
+
 for letter in input_str:
 	if letter in "0123456789":
 		was_digit = True
-	if letter in "+-/*^" and was_digit and operation is None:
-		operation = letter
-	else:
-		if operation is None:
-			str_a += letter
+	if letter in "+-/*^" and was_digit:
+		delitel = float(str_a)
+		if operation == '/':
+			if delitel == 0:
+				result = "Inf"
+			else:
+				result = result / delitel
+		elif operation == "+":
+			result = result + delitel
+		elif operation == "*":
+			result = result * delitel
+		elif operation == "-":
+			result = result - delitel
+		elif operation == "^":
+			result = result ** delitel
 		else:
-			str_b += letter
+			result = None
+		operation = letter
+		was_digit = False
+		str_a = ""
+	else:
+		str_a += letter
 
-delimoe = float(str_a)
-delitel = float(str_b)
-
-result = None
+delitel = float(str_a)
 if operation == '/':
 	if delitel == 0:
 		result = "Inf"
 	else:
-		result = delimoe / delitel
+		result = result / delitel
 elif operation == "+":
-	result = delimoe + delitel
+	result = result + delitel
 elif operation == "*":
-	result = delimoe * delitel	
+	result = result * delitel	
 elif operation == "-":
-	result = delimoe - delitel	
+	result = result - delitel	
 elif operation == "^":
-	result = delimoe ** delitel
+	result = result ** delitel
 else:
-	result = None		
-
+	result = None
+		
 print("Result: " + str(result))
