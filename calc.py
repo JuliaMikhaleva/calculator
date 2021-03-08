@@ -6,7 +6,10 @@ operation = None
 was_digit = False
 str_a = ""
 str_b = ""
-for letter in input_str:
+i = 0
+while i < len(input_str):
+	letter = input_str[i]
+	i += 1
 	if letter in "0123456789":
 		was_digit = True
 	if letter in "+-/*^" and was_digit and operation is None:
