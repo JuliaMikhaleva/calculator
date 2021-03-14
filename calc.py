@@ -2,52 +2,37 @@
 
 input_str = input("One line with one operation: ")
 
-result = 0
-operation = "+"
+operations = []
+variables = []
 was_digit = False
 str_a = ""
 
-for letter in input_str:
+for i in range(len(input_str)):
+	letter = input_str[i]
 	if letter in "0123456789":
 		was_digit = True
 	if letter in "+-/*^" and was_digit:
-		delitel = float(str_a)
-		if operation == '/':
-			if delitel == 0:
-				result = "Inf"
-			else:
-				result = result / delitel
-		elif operation == "+":
-			result = result + delitel
-		elif operation == "*":
-			result = result * delitel
-		elif operation == "-":
-			result = result - delitel
-		elif operation == "^":
-			result = result ** delitel
-		else:
-			result = None
-		operation = letter
+		operations.append(letter)
+		variables.append(float(str_a))
 		was_digit = False
 		str_a = ""
 	else:
 		str_a += letter
 
-delitel = float(str_a)
-if operation == '/':
-	if delitel == 0:
+variables.append(float(str_a))
+result = variables[0]
+for i in range(len(operations)):
+	if result is None or type(result) is str:
+		break
+	op = operations[i]
+	var = variables[i+1]
+	if op == '/' and var == 0:
 		result = "Inf"
+	elif op == "^":
+		result = result ** var
+	elif op in "+-*/":
+		result = eval(f"{result}{op}{var}")
 	else:
-		result = result / delitel
-elif operation == "+":
-	result = result + delitel
-elif operation == "*":
-	result = result * delitel	
-elif operation == "-":
-	result = result - delitel	
-elif operation == "^":
-	result = result ** delitel
-else:
-	result = None
+		result = None
 		
 print("Result: " + str(result))
