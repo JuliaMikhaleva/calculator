@@ -6,6 +6,8 @@ import telebot
 from telebot import types
 # В этом файле я спрятала свой токен, который получила от BotFather
 from secret import TOKEN
+# Сюда я положила свой chat id, по которому бот будет присылать мне уведомления
+from secret import master_chat_id
 
 # Подключаюсь к созданному боту
 bot = telebot.TeleBot(TOKEN, parse_mode=None)
@@ -24,6 +26,9 @@ class User:
         # Проверяю, что ребенок уже был записан
         # Ввод фамилии является последним этапом при записи ребенка
         return self.last_name is not None
+
+    def get_information(self):
+        return "{} {}, {}, дата пробного занятия - {}".format(self.last_name, self.first_name, self.department, self.training_day.lower())
 
 
 # Создаю структуру для поиска информации о пользователе по user_id
@@ -51,7 +56,8 @@ def send_welcome(message):
     # Создаю сами кнопочки
     itembtns = list()
     if my_clients[user_id].is_registered():
-        itembtns.append("Ваш ребенок уже записан!")
+        # Добавила более явно обратную связь
+        itembtns.append("Ваш ребенок уже записан! " + my_clients[user_id].get_information())
     else:
         itembtns.append("Записать ребенка на пробное занятие")
     itembtns += [
@@ -137,7 +143,9 @@ def enter_success(message):
     chat_id = message.chat.id
     user_id = message.from_user.id
     my_clients[user_id].last_name = message.text
-    bot.send_message(chat_id, "Ребенок записан!")
+    bot.send_message(chat_id, "Ребенок записан! " + my_clients[user_id].get_information())
+    # Информирую себя о новой записи
+    bot.send_message(master_chat_id, "У нас новая запись! " + my_clients[user_id].get_information())
 
 
 # Обрабатываю "Узнать расписание"
@@ -148,6 +156,23 @@ def send_timetable(message):
 На ЦСКА занятия проходят по средам и пятницам с 19:00 до 20:00"
 На Электрозаводской занятия проходят по вторникам и четвергам с 18:00 до 19:00
 """
+    bot.send_message(chat_id, message)
+
+
+@bot.message_handler(regexp="Узнать адрес")
+def send_addresses(message):
+    chat_id = message.chat.id
+    message = """
+На ЦСКА занятия проходят по адресу Ходынский бульвар, д.1
+На Электрозаводской занятия проходят по адресу Семеновская набережная, д.6
+"""
+    bot.send_message(chat_id, message)
+
+
+@bot.message_handler(regexp="Узнать стоимость")
+def send_price(message):
+    chat_id = message.chat.id
+    message = "Во всех наших филиалах стоимость абонемента на 8 занятий 5500"
     bot.send_message(chat_id, message)
 
 
